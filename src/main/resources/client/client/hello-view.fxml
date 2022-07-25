@@ -29,9 +29,9 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <TextField fx:id="login" prefHeight="25.0" prefWidth="147.0" promptText="Логин..." />
-                  <TextField fx:id="nickname" prefHeight="25.0" prefWidth="208.0" promptText="Никнейм..." GridPane.rowIndex="4" />
-                  <PasswordField fx:id="password" promptText="Пароль..." GridPane.rowIndex="2" />
+                  <TextField fx:id="loginField" prefHeight="25.0" prefWidth="147.0" promptText="Логин..." />
+                  <TextField fx:id="nicknameField" prefHeight="25.0" prefWidth="208.0" promptText="Никнейм..." GridPane.rowIndex="4" />
+                  <PasswordField fx:id="passwordField" promptText="Пароль..." GridPane.rowIndex="2" />
                </children>
             </GridPane>
             <Label fx:id="signUpSpase" layoutX="-40.0" layoutY="10.0" text="Логин и никнейм не должны содержать пробелов" textFill="RED" visible="false" />

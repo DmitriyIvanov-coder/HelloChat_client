@@ -1,7 +1,6 @@
 package client.client;
 
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -18,7 +17,6 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.Scanner;
 
 public class Controller implements Initializable {
 
@@ -30,6 +28,7 @@ public class Controller implements Initializable {
     static DataInputStream in;
     static DataOutputStream out;
     public TextField textField;
+    String nickname;
     public TextArea textArea;
     @FXML
     public HBox startWindow;
@@ -38,11 +37,11 @@ public class Controller implements Initializable {
     @FXML
     public Pane signUpWindow;
     @FXML
-    public TextField login;
+    public TextField loginField;
     @FXML
-    public TextField nickname;
+    public TextField nicknameField;
     @FXML
-    public PasswordField password;
+    public PasswordField passwordField;
     @FXML
     public Label existedLogin;
     @FXML
@@ -64,12 +63,13 @@ public class Controller implements Initializable {
             signInSpace.setVisible(true);
         }else {
             String clientData = loginIn.getText() + " " + passwordIn.getText();
-            out.writeUTF(clientData);
+            out.writeUTF("Ch "+clientData);
             if (in.readBoolean()) {
                 signInSpace.setVisible(false);
                 invalidData.setVisible(false);
                 signInWindow.setVisible(false);
                 chatWindow.setVisible(true);
+                nickname = in.readUTF();
                 startChatWorking();
             } else {
                 signInSpace.setVisible(false);
@@ -80,15 +80,17 @@ public class Controller implements Initializable {
 
     @FXML
     public void signUp() throws IOException {
-        if (login.getText().contains(" ")||nickname.getText().contains(" ")){
+
+        if (loginField.getText().contains(" ")|| nicknameField.getText().contains(" ")){
             signUpSpase.setVisible(true);
         }else {
-            String clientData = login.getText()+" "+nickname.getText()+" "+password.getText();
-            out.writeUTF(clientData);
+            nickname = nicknameField.getText();
+            String clientData = loginField.getText()+" "+ nicknameField.getText()+" "+ passwordField.getText();
+            out.writeUTF("R "+clientData);
             if (in.readBoolean()){
                 signUpSpase.setVisible(false);
-                signUpWindow.setVisible(false);
                 existedLogin.setVisible(false);
+                signUpWindow.setVisible(false);
                 chatWindow.setVisible(true);
                 startChatWorking();
             }else {
@@ -97,27 +99,38 @@ public class Controller implements Initializable {
             }
         }
     }
+
     @FXML
     public void backToStartWindow() throws IOException {
-        out.writeUTF("0");
+        socket.close();
+//        out.writeUTF("0");
+        signInSpace.setVisible(false);
+        invalidData.setVisible(false);
+        signUpSpase.setVisible(false);
+        existedLogin.setVisible(false);
         signUpWindow.setVisible(false);
         signInWindow.setVisible(false);
+        chatWindow.setVisible(false);
+        textArea.clear();
+        dropTitle();
         startWindow.setVisible(true);
     }
+
     @FXML
     public void exitAction() throws IOException {
-        socket.close();
         System.exit(0);
     }
     @FXML
     public void goToSignUpWindow() throws IOException {
-        out.writeBoolean(true);
+        connectToServer();
+//        out.writeBoolean(true);
         startWindow.setVisible(false);
         signUpWindow.setVisible(true);
     }
     @FXML
     protected void goToSignInWindow() throws IOException {
-        out.writeBoolean(false);
+        connectToServer();
+//        out.writeBoolean(false);
         startWindow.setVisible(false);
         signInWindow.setVisible(true);
     }
@@ -130,11 +143,9 @@ public class Controller implements Initializable {
         textField.requestFocus();
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    private void connectToServer(){
         try {
             socket = new Socket(IP_ADDRESS,PORT);
-
             in = new DataInputStream(socket.getInputStream());
             out = new DataOutputStream(socket.getOutputStream());
         } catch (IOException e) {
@@ -142,23 +153,25 @@ public class Controller implements Initializable {
         }
     }
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+//        connectToServer();
+    }
+
     public void startChatWorking(){
+        setClientTitle();
+        textField.requestFocus();
         Thread t2 =new Thread(()->{
             try{
                     while (true){
                         String msgIn = in.readUTF();
-                        if (msgIn.equals("/end")){
-                            System.out.println("server disconnect us");
-                            out.writeUTF("/end");
-                            break;
-                        }
                         textArea.appendText(msgIn+"\n");
                     }
             }catch (IOException e) {
                 throw new RuntimeException(e);
             }finally {
                 try {
-                    socket.close();
+                    backToStartWindow();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -166,9 +179,16 @@ public class Controller implements Initializable {
 
         });
         t2.start();
+
     }
 
-    private void setClientTitle(String nickname){
-        Client.stage.setTitle("HelloChat!: "+nickname);
+    private void setClientTitle(){
+        Client.stage.setTitle("HelloChat!: "+ nickname);
+    }
+    private void dropTitle(){
+        Platform.runLater(()->{
+            Client.stage.setTitle("HelloChat!");
+        });
+
     }
 }
