@@ -24,6 +24,7 @@ public class Controller implements Initializable {
 
     static Socket socket;
     static final int PORT = 8189;
+
     static final String IP_ADDRESS = "192.168.1.140";
 
     static DataInputStream in;
@@ -52,32 +53,48 @@ public class Controller implements Initializable {
     public PasswordField passwordIn;
     @FXML
     public Label invalidData;
+    @FXML
+    public Label signUpSpase;
+    @FXML
+    public Label signInSpace;
 
     @FXML
     public void signIn() throws IOException {
-        String clientData = loginIn.getText()+" "+passwordIn.getText();
-        out.writeUTF(clientData);
-        if (in.readBoolean()){
-            invalidData.setVisible(false);
-            signInWindow.setVisible(false);
-            chatWindow.setVisible(true);
-            startChatWorking();
+        if (loginIn.getText().contains(" ")){
+            signInSpace.setVisible(true);
         }else {
-            invalidData.setVisible(true);
+            String clientData = loginIn.getText() + " " + passwordIn.getText();
+            out.writeUTF(clientData);
+            if (in.readBoolean()) {
+                signInSpace.setVisible(false);
+                invalidData.setVisible(false);
+                signInWindow.setVisible(false);
+                chatWindow.setVisible(true);
+                startChatWorking();
+            } else {
+                signInSpace.setVisible(false);
+                invalidData.setVisible(true);
+            }
         }
     }
 
     @FXML
     public void signUp() throws IOException {
-        String clientData = login.getText()+" "+password.getText()+" "+nickname.getText();
-        out.writeUTF(clientData);
-        if (in.readBoolean()){
-            signUpWindow.setVisible(false);
-            existedLogin.setVisible(false);
-            chatWindow.setVisible(true);
-            startChatWorking();
+        if (login.getText().contains(" ")||nickname.getText().contains(" ")){
+            signUpSpase.setVisible(true);
         }else {
-            existedLogin.setVisible(true);
+            String clientData = login.getText()+" "+nickname.getText()+" "+password.getText();
+            out.writeUTF(clientData);
+            if (in.readBoolean()){
+                signUpSpase.setVisible(false);
+                signUpWindow.setVisible(false);
+                existedLogin.setVisible(false);
+                chatWindow.setVisible(true);
+                startChatWorking();
+            }else {
+                signUpSpase.setVisible(false);
+                existedLogin.setVisible(true);
+            }
         }
     }
     @FXML
@@ -130,14 +147,12 @@ public class Controller implements Initializable {
             try{
                     while (true){
                         String msgIn = in.readUTF();
-//                        Boolean msgIn = in.readBoolean();
                         if (msgIn.equals("/end")){
                             System.out.println("server disconnect us");
                             out.writeUTF("/end");
                             break;
                         }
                         textArea.appendText(msgIn+"\n");
-//                            System.out.println("Server: "+msgIn);
                     }
             }catch (IOException e) {
                 throw new RuntimeException(e);
@@ -151,8 +166,9 @@ public class Controller implements Initializable {
 
         });
         t2.start();
-//        t2.setDaemon(true);
     }
 
-
+    private void setClientTitle(String nickname){
+        Client.stage.setTitle("HelloChat!: "+nickname);
+    }
 }

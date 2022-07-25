@@ -34,16 +34,18 @@
                   <PasswordField fx:id="password" promptText="Пароль..." GridPane.rowIndex="2" />
                </children>
             </GridPane>
+            <Label fx:id="signUpSpase" layoutX="-40.0" layoutY="10.0" text="Логин и никнейм не должны содержать пробелов" textFill="RED" visible="false" />
 
 
             <Button layoutY="157.0" mnemonicParsing="false" onAction="#signUp" prefHeight="25.0" prefWidth="85.0" text="Далее" />
             <Button layoutX="115.0" layoutY="157.0" mnemonicParsing="false" onAction="#backToStartWindow" prefHeight="25.0" prefWidth="85.0" text="Назад" />
-            <Label fx:id="existedLogin" text="Такой логин уже существует" visible="false" />
+            <Label fx:id="existedLogin" text="Такой логин уже существует" textFill="RED" visible="false" />
          </children>
       </Pane>
 
       <Pane fx:id="signInWindow" layoutX="70.0" layoutY="30.0" managed="false" prefHeight="196.0" prefWidth="200.0" visible="false">
          <children>
+            <Label fx:id="signInSpace" layoutX="-50.0" layoutY="20.0" text="Логин и никнейм не должны содержать пробелов" textFill="RED" visible="false" />
             <GridPane layoutY="53.0" prefHeight="90.0" prefWidth="200.0">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -62,20 +64,18 @@
             </GridPane>
             <Button layoutY="157.0" mnemonicParsing="false" onAction="#signIn" prefHeight="25.0" prefWidth="85.0" text="Далее" />
             <Button layoutX="115.0" layoutY="157.0" mnemonicParsing="false" onAction="#backToStartWindow" prefHeight="25.0" prefWidth="85.0" text="Назад" />
-            <Label fx:id="invalidData" text="Неправильный логин или пароль" visible="false" />
+            <Label fx:id="invalidData" text="Неправильный логин или пароль" textFill="RED" visible="false" />
          </children>
       </Pane>
 
 
       <VBox fx:id="chatWindow" prefHeight="240.0" prefWidth="320.0" visible="false">
          <children>
-            <TextArea fx:id="textArea" prefHeight="497.0" prefWidth="320.0" />
+            <TextArea fx:id="textArea" editable="false" prefHeight="497.0" prefWidth="320.0" />
             <HBox prefHeight="240.0" prefWidth="320.0">
                <children>
-                  <TextField fx:id="textField" prefHeight="25.0" prefWidth="265.0" promptText="Введите сообщение..."
-                             onAction="#onSendButtonClick"/>
-                  <Button mnemonicParsing="false" onAction="#onSendButtonClick" prefHeight="29.0"
-                          prefWidth="95.0" text="Отправить" />
+                  <TextField fx:id="textField" onAction="#onSendButtonClick" prefHeight="25.0" prefWidth="265.0" promptText="Введите сообщение..." />
+                  <Button mnemonicParsing="false" onAction="#onSendButtonClick" prefHeight="29.0" prefWidth="95.0" text="Отправить" />
                </children>
             </HBox>
          </children>
