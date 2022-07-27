@@ -23,11 +23,13 @@ public class Controller implements Initializable {
     static Socket socket;
     static final int PORT = 8189;
 
-    static final String IP_ADDRESS = "192.168.1.140";
+    static final String IP_ADDRESS = "localhost";
 
     static DataInputStream in;
     static DataOutputStream out;
     public TextField textField;
+    @FXML
+    public Label signUpLabel;
     String nickname;
     public TextArea textArea;
     @FXML
@@ -43,59 +45,60 @@ public class Controller implements Initializable {
     @FXML
     public PasswordField passwordField;
     @FXML
-    public Label existedLogin;
-    @FXML
     public VBox chatWindow;
     @FXML
     public TextField loginIn;
     @FXML
     public PasswordField passwordIn;
     @FXML
-    public Label invalidData;
-    @FXML
-    public Label signUpSpase;
-    @FXML
-    public Label signInSpace;
+    public Label signInLabel;
 
     @FXML
     public void signIn() throws IOException {
+
         if (loginIn.getText().contains(" ")){
-            signInSpace.setVisible(true);
+            signInLabel.setText("Логин и никнейм не должны содержать пробелов");
+            signInLabel.setVisible(true);
         }else {
             String clientData = loginIn.getText() + " " + passwordIn.getText();
             out.writeUTF("Ch "+clientData);
-            if (in.readBoolean()) {
-                signInSpace.setVisible(false);
-                invalidData.setVisible(false);
+            String isNext = in.readUTF();
+            if (isNext.equals("0")) {
+                signInLabel.setVisible(false);
                 signInWindow.setVisible(false);
                 chatWindow.setVisible(true);
                 nickname = in.readUTF();
                 startChatWorking();
-            } else {
-                signInSpace.setVisible(false);
-                invalidData.setVisible(true);
+            } else if (isNext.equals("1")){
+                signInLabel.setText("Неправильный логин или пароль");
+                signInLabel.setVisible(true);
+            }else if (isNext.equals("2")){
+                signInLabel.setText("Клиент уже онлайн");
+                signInLabel.setVisible(true);
             }
         }
     }
 
     @FXML
     public void signUp() throws IOException {
-
-        if (loginField.getText().contains(" ")|| nicknameField.getText().contains(" ")){
-            signUpSpase.setVisible(true);
+        if (loginField.getText().trim().length()==0||passwordField.getText().trim().length()==0){
+            signUpLabel.setText("Логин и пароль не могут быть пустыми");
+            signUpLabel.setVisible(true);
+        }else if (loginField.getText().contains(" ")|| nicknameField.getText().contains(" ")){
+            signUpLabel.setText("Логин и никнейм не должны содержать пробелов");
+            signUpLabel.setVisible(true);
         }else {
-            nickname = nicknameField.getText();
-            String clientData = loginField.getText()+" "+ nicknameField.getText()+" "+ passwordField.getText();
+            nickname = loginField.getText();
+            String clientData = loginField.getText()+" "+loginField.getText()+" "+ passwordField.getText();
             out.writeUTF("R "+clientData);
             if (in.readBoolean()){
-                signUpSpase.setVisible(false);
-                existedLogin.setVisible(false);
+                signUpLabel.setVisible(false);
                 signUpWindow.setVisible(false);
                 chatWindow.setVisible(true);
                 startChatWorking();
             }else {
-                signUpSpase.setVisible(false);
-                existedLogin.setVisible(true);
+                signUpLabel.setText("Такой логин уже существует");
+                signUpLabel.setVisible(true);
             }
         }
     }
@@ -104,10 +107,8 @@ public class Controller implements Initializable {
     public void backToStartWindow() throws IOException {
         socket.close();
 //        out.writeUTF("0");
-        signInSpace.setVisible(false);
-        invalidData.setVisible(false);
-        signUpSpase.setVisible(false);
-        existedLogin.setVisible(false);
+        signInLabel.setVisible(false);
+        signUpLabel.setVisible(false);
         signUpWindow.setVisible(false);
         signInWindow.setVisible(false);
         chatWindow.setVisible(false);
