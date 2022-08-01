@@ -3,7 +3,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="240.0" prefWidth="320.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.client.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="240.0" prefWidth="320.0" xmlns="http://javafx.com/javafx/11.0.14-internal"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.client.Controller">
    <children>
 
       <HBox fx:id="startWindow" layoutX="10.0" layoutY="108.0" prefHeight="25.0" prefWidth="301.0">
@@ -37,8 +39,10 @@
             <Label fx:id="signUpLabel" layoutX="-40.0" layoutY="10.0" text="Логин и никнейм не должны содержать пробелов" textFill="RED" visible="false" />
 
 
-            <Button layoutY="157.0" mnemonicParsing="false" onAction="#signUp" prefHeight="25.0" prefWidth="85.0" text="Далее" />
-            <Button layoutX="115.0" layoutY="157.0" mnemonicParsing="false" onAction="#backToStartWindow" prefHeight="25.0" prefWidth="85.0" text="Назад" />
+            <Button layoutY="157.0" mnemonicParsing="false" onAction="#signUp" prefHeight="25.0" prefWidth="85.0"
+                    text="Далее" />
+            <Button layoutX="115.0" layoutY="157.0" mnemonicParsing="false" onAction="#backToStartWindow"
+                    prefHeight="25.0" prefWidth="85.0" text="Назад" />
          </children>
       </Pane>
 
@@ -69,10 +73,15 @@
 
       <VBox fx:id="chatWindow" prefHeight="240.0" prefWidth="320.0" visible="false">
          <children>
-            <TextArea fx:id="textArea" editable="false" prefHeight="497.0" prefWidth="320.0" />
+            <HBox prefHeight="476.0" prefWidth="320.0">
+               <children>
+                  <TextArea fx:id="textAreaForMessages" editable="false" prefHeight="215.0" prefWidth="347.0" wrapText="true" />
+                  <ListView fx:id="listViewForOnlineClients" prefHeight="200.0" prefWidth="200.0" onMouseClicked="#sendTo"/>
+               </children>
+            </HBox>
             <HBox prefHeight="240.0" prefWidth="320.0">
                <children>
-                  <TextField fx:id="textField" onAction="#onSendButtonClick" prefHeight="25.0" prefWidth="265.0" promptText="Введите сообщение..." />
+                  <TextField fx:id="textField" onAction="#onSendButtonClick" prefHeight="25.0" prefWidth="244.0" promptText="Введите сообщение..." />
                   <Button mnemonicParsing="false" onAction="#onSendButtonClick" prefHeight="29.0" prefWidth="95.0" text="Отправить" />
                </children>
             </HBox>
