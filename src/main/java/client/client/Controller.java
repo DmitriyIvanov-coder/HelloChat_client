@@ -68,7 +68,7 @@ public class Controller implements Initializable {
             signInLabel.setVisible(true);
         }else {
             String clientData = loginIn.getText() + " " + passwordIn.getText();
-            out.writeUTF("Ch "+clientData);
+            out.writeUTF("SI "+clientData);
             String isNext = in.readUTF();
             if (isNext.equals("0")) {
                 signInLabel.setVisible(false);

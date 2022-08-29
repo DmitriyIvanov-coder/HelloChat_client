@@ -1,18 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-            minWidth="-Infinity" prefHeight="240.0"
-            prefWidth="320.0" xmlns="http://javafx.com/javafx/11.0.14-internal"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.client.RegController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="240.0" prefWidth="320.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.client.RegController">
 
-    <Pane fx:id="signUpWindow" layoutX="60.0" layoutY="20.0" managed="false" prefHeight="196.0" prefWidth="200.0"
-          visible="true">
+    <Pane fx:id="signUpWindow" layoutX="60.0" layoutY="20.0" managed="false" prefHeight="196.0" prefWidth="200.0" visible="true">
         <children>
             <GridPane layoutY="40.0" prefHeight="90.0" prefWidth="200.0">
                 <columnConstraints>
@@ -27,17 +20,20 @@
                 </rowConstraints>
                 <children>
                     <TextField fx:id="loginField" prefHeight="25.0" prefWidth="147.0" promptText="Логин..." />
-                    <TextField fx:id="nicknameField" disable="true" prefHeight="25.0" prefWidth="208.0" promptText="Coming soon..." GridPane.rowIndex="4" />
+                    <TextField fx:id="changeLoginField" disable="true" prefHeight="25.0" prefWidth="208.0" promptText="Сменить логин на..." GridPane.rowIndex="4" />
                     <PasswordField fx:id="passwordField" promptText="Пароль..." GridPane.rowIndex="2" />
                 </children>
             </GridPane>
-            <Label fx:id="signUpLabel" layoutX="-40.0" layoutY="10.0" text="Логин и никнейм не должны содержать пробелов" textFill="RED" visible="false" />
 
 
-            <Button fx:id="signUpBtn" layoutY="157.0" mnemonicParsing="false" onAction="#signUp" prefHeight="25.0" prefWidth="85.0"
-                    text="Далее" />
-            <Button layoutX="115.0" layoutY="157.0" mnemonicParsing="false" onAction="#backToStartWindow"
-                    prefHeight="25.0" prefWidth="85.0" text="Назад" />
+            <Button fx:id="signUpBtn" layoutY="157.0" mnemonicParsing="false" onAction="#signUp" prefHeight="25.0" prefWidth="85.0" text="Далее" />
+            <Button layoutX="115.0" layoutY="157.0" mnemonicParsing="false" onAction="#backToStartWindow" prefHeight="25.0" prefWidth="85.0" text="Назад" />
         </children>
     </Pane>
+   <RadioButton fx:id="regRadioBtn" layoutX="60.0" layoutY="39.0" mnemonicParsing="false" onAction="#changeMode" selected="true" text="Регистрация">
+      <toggleGroup>
+         <ToggleGroup fx:id="regGroup" />
+      </toggleGroup></RadioButton>
+   <RadioButton fx:id="changeLoginRadioBtn" layoutX="160.0" layoutY="39.0" mnemonicParsing="false" onAction="#changeMode" text="Смена логина" toggleGroup="$regGroup" />
+      <Label fx:id="signUpLabel" layoutX="21.0" layoutY="20.0" text="Логин и никнейм не должны содержать пробелов" textFill="RED" visible="false" />
 </AnchorPane>
