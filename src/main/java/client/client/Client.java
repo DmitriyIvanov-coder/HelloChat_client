@@ -37,18 +37,15 @@ public class Client extends Application {
         stageMain.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent event) {
-                System.exit(0);
+                    System.exit(0);
             }
         });
     }
     public static void showOrCloseRegWindow(){
         if (stageReg.isShowing()){
-//            stageMain.show();
             stageReg.close();
         }else {
-
             stageReg.showAndWait();
-//            stageReg.show();
         }
     }
 

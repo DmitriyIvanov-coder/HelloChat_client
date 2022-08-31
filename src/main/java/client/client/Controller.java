@@ -9,6 +9,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.WindowEvent;
 
 import java.io.*;
 import java.net.Socket;
@@ -19,6 +20,7 @@ import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
 
+
     static Socket socket;
     private final int PORT = 8189;
 
@@ -28,6 +30,8 @@ public class Controller implements Initializable {
     private DataOutputStream out;
 
     static List<String> onlineClientsNicks = new ArrayList<>();
+
+    static WriterHistory writerHistory = new WriterHistory();
     @FXML
     public  TextField textField;
     @FXML
@@ -73,6 +77,7 @@ public class Controller implements Initializable {
             if (isNext.equals("0")) {
                 signInLabel.setVisible(false);
                 signInWindow.setVisible(false);
+                writerHistory.loadHistory(textAreaForMessages);
                 chatWindow.setVisible(true);
                 nickname = in.readUTF();
                 
@@ -87,31 +92,31 @@ public class Controller implements Initializable {
         }
     }
 
-    @FXML
-    public void signUp() throws IOException {
-        if (loginField.getText().trim().length()==0||passwordField.getText().trim().length()==0){
-            signUpLabel.setText("Логин и пароль не могут быть пустыми");
-            signUpLabel.setVisible(true);
-        }else if (loginField.getText().contains(" ")|| nicknameField.getText().contains(" ")){
-            signUpLabel.setText("Логин и никнейм не должны содержать пробелов");
-            signUpLabel.setVisible(true);
-        }else {
-
-            nickname = loginField.getText();
-            String clientData = loginField.getText()+" "+loginField.getText()+" "+ passwordField.getText();
-            out.writeUTF("R "+clientData);
-            if (in.readBoolean()){
-                signUpLabel.setVisible(false);
-                signUpWindow.setVisible(false);
-                Client.showOrCloseRegWindow();
-                chatWindow.setVisible(true);
-                startChatWorking();
-            }else {
-                signUpLabel.setText("Такой логин уже существует");
-                signUpLabel.setVisible(true);
-            }
-        }
-    }
+//    @FXML
+//    public void signUp() throws IOException {
+//        if (loginField.getText().trim().length()==0||passwordField.getText().trim().length()==0){
+//            signUpLabel.setText("Логин и пароль не могут быть пустыми");
+//            signUpLabel.setVisible(true);
+//        }else if (loginField.getText().contains(" ")|| nicknameField.getText().contains(" ")){
+//            signUpLabel.setText("Логин и никнейм не должны содержать пробелов");
+//            signUpLabel.setVisible(true);
+//        }else {
+//
+//            nickname = loginField.getText();
+//            String clientData = loginField.getText()+" "+loginField.getText()+" "+ passwordField.getText();
+//            out.writeUTF("R "+clientData);
+//            if (in.readBoolean()){
+//                signUpLabel.setVisible(false);
+//                signUpWindow.setVisible(false);
+//                Client.showOrCloseRegWindow();
+//                chatWindow.setVisible(true);
+//                startChatWorking();
+//            }else {
+//                signUpLabel.setText("Такой логин уже существует");
+//                signUpLabel.setVisible(true);
+//            }
+//        }
+//    }
 
     @FXML
     public void backToStartWindow() throws IOException {
@@ -128,20 +133,18 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    public void exitAction(){
+    public void exitAction() throws IOException {
+//        writerHistory.writeMessagesHistory(textAreaForMessages.getText());
         System.exit(0);
     }
     @FXML
     public void goToSignUpWindow() throws IOException {
         connectToServer();
         Client.showOrCloseRegWindow();
-//        startWindow.setVisible(false);
-//        signUpWindow.setVisible(true);
     }
     @FXML
     protected void goToSignInWindow() throws IOException {
         connectToServer();
-//        out.writeBoolean(false);
         startWindow.setVisible(false);
         signInWindow.setVisible(true);
     }
@@ -166,7 +169,7 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-//        connectToServer();
+
     }
 
     public void startChatWorking(){
@@ -187,6 +190,7 @@ public class Controller implements Initializable {
                             }
                         }else {
                             textAreaForMessages.appendText(msgIn+"\n");
+                            writerHistory.writeMessagesHistory(msgIn+"\n");
                         }
                     }
             }catch (IOException e) {
@@ -196,6 +200,7 @@ public class Controller implements Initializable {
             } finally {
                 try {
                     backToStartWindow();
+
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -203,8 +208,9 @@ public class Controller implements Initializable {
 
         });
         t2.start();
-
     }
+
+
 
     private void setClientTitle(){
         Client.stageMain.setTitle("HelloChat!: "+ nickname);

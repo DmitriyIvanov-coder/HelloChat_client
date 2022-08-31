@@ -38,8 +38,8 @@
             </GridPane>
             <Label fx:id="signUpLabel" layoutX="-40.0" layoutY="10.0" text="Логин и никнейм не должны содержать пробелов" textFill="RED" visible="false" />
 
-
-            <Button layoutY="157.0" mnemonicParsing="false" onAction="#signUp" prefHeight="25.0" prefWidth="85.0"
+            <!--onAction="#signUp"-->
+            <Button layoutY="157.0" mnemonicParsing="false"  prefHeight="25.0" prefWidth="85.0"
                     text="Далее" />
             <Button layoutX="115.0" layoutY="157.0" mnemonicParsing="false" onAction="#backToStartWindow"
                     prefHeight="25.0" prefWidth="85.0" text="Назад" />
